@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float jumpPower;
 
     bool isJump = false;
+    bool isGrounded = false;
     Rigidbody2D rigid;
 
     Vector2 inputVec;
@@ -19,17 +20,26 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rigid.linearVelocity = new Vector2(
-            inputVec.x * speed,rigid.linearVelocityY);
+            inputVec.x * speed, rigid.linearVelocityY);
 
-        if (isJump)
+        if (isJump && isGrounded)
         {
             rigid.linearVelocity = new Vector2(
                 rigid.linearVelocityX, jumpPower);
             isJump = false;
+            isGrounded = false;
+
         }
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
 
     void OnMove(InputValue value)
     {
@@ -38,7 +48,7 @@ public class Player : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && isGrounded)
             isJump = true;
     }
 }
