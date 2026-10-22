@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     public float speed;
     public float jumpPower;
 
+    public GameObject spawnPoint;
+
     bool isJump = false;
     bool isGrounded = false;
     Rigidbody2D rigid;
@@ -38,9 +40,20 @@ public class Player : MonoBehaviour
         {
             isGrounded = true;
         }
+
+        if (collision.gameObject.CompareTag("Spike"))
+        {
+            gameObject.transform.position = spawnPoint.transform.position;
+        }
     }
 
-
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
