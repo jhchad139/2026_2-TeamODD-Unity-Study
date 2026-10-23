@@ -12,11 +12,25 @@ public class Player : MonoBehaviour
     bool isJump = false;
     bool isGrounded = false;
     Rigidbody2D rigid;
-
+    SpriteRenderer sprite;
+    Animator anima;
     Vector2 inputVec;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        anima = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (inputVec.x < 0)
+            sprite.flipX = true;
+        else if (inputVec.x > 0) sprite.flipX = false;
+
+        anima.SetBool("run", inputVec.x != 0);
+
+
     }
 
     private void FixedUpdate()
@@ -57,6 +71,8 @@ public class Player : MonoBehaviour
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
+        
+        
     }
 
     void OnJump(InputValue value)
