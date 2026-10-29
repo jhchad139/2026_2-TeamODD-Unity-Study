@@ -30,6 +30,10 @@ public class Player : MonoBehaviour
             sprite.flipX = false;
 
         anima.SetBool("move", inputVec.x != 0);
+
+        if(transform.position.y < -10f){
+            gameObject.transform.position = spawnPoint.transform.position;
+        }
     }
 
     void FixedUpdate(){
@@ -59,6 +63,7 @@ public class Player : MonoBehaviour
     void OnJump(InputValue value){
         if(value.isPressed && isGrounded){
             isJump = true;
+            anima.SetTrigger("jump");
         }
     }
 }
