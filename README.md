@@ -82,7 +82,7 @@
 
 (https://assetstore.unity.com/packages/2d/characters/simple-2d-platformer-assets-pack-188518)
 
-해당 에셋은 제작자에게 스터디 및 GitHub Repository에서의 사용에 대한 허가를 받은 후 사용합니다.
+해당 에셋은 제작자 ( 골드메탈 ) 에게 스터디 및 GitHub Repository에서의 사용에 대한 허가를 받은 후 사용합니다.
 
 ---
 
