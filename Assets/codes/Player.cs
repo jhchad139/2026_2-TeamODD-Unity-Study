@@ -75,17 +75,13 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("coin"))
         {
             Gamemanager.instance.Addcoin();
+
             Destroy(collision.gameObject);
         }
 
-        
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Respawn"))
-            Gamemanager.instance.SpawnPlayer(nowStage);
-    }
+    
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();

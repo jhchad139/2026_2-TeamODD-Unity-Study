@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
 
+
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager instance;
+
     public Player player;
 
     public GameObject[] stages;
@@ -12,6 +14,9 @@ public class Gamemanager : MonoBehaviour
     public TMP_Text coinText;
 
     public int coinCount;
+
+    
+
 
 
     private void Awake()
@@ -23,8 +28,8 @@ public class Gamemanager : MonoBehaviour
         else
             Destroy(gameObject);
 
-
         coinCount = 0;
+       
     }
 
     public void MoveStage(int n)
@@ -35,17 +40,19 @@ public class Gamemanager : MonoBehaviour
         SpawnPlayer(n);
     }
 
-    public void SpawnPlayer(int n)
+    public void SpawnPlayer(int n) // 스테이지 정보
     {
-        player.transform.position = spawnPoint[n].transform.position;
+       player.transform.position = spawnPoint[n].transform.position;
     }
 
     public void Addcoin()
     {
         coinCount++;
 
-        coinText.text = "Coin : " + coinCount;
+        coinText.text = "coin : " + coinCount;
     }
+
+    
     public void ResetStage(int n)
     {
 
