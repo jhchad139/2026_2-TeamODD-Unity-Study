@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,31 +7,85 @@ public class Player : MonoBehaviour
 {
     public float speed;
     public float jumpPower;
+    public int nowStage;
+    
 
     bool isJump = false;
+
+    bool isGrounded = false;
+
     Rigidbody2D rigid;
+    SpriteRenderer sprite;
+    Animator anima;
 
     Vector2 inputVec;
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        anima = GetComponent<Animator>();
+        nowStage = 0;
     }
 
+    private void Update()
+    {
+        if (inputVec.x < 0)
+            sprite.flipX = true;
+        else if (inputVec.x > 0)
+            sprite.flipX = false;
+
+        anima.SetBool("move", inputVec.x != 0);
+
+    }
+    
     private void FixedUpdate()
     {
         rigid.linearVelocity = new Vector2(
             inputVec.x * speed,rigid.linearVelocityY);
 
-        if (isJump)
+        if (isJump && isGrounded)
         {
             rigid.linearVelocity = new Vector2(
                 rigid.linearVelocityX, jumpPower);
             isJump = false;
+            isGrounded = false;
         }
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground")) 
+            isGrounded = true;
 
+        if (collision.gameObject.CompareTag("Spike"))
+            Gamemanager.instance.SpawnPlayer(nowStage);
+
+        
+           
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            nowStage++;
+            Gamemanager.instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            Gamemanager.instance.Addcoin();
+            Destroy(collision.gameObject);
+        }
+
+        
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Respawn"))
+            Gamemanager.instance.SpawnPlayer(nowStage);
+    }
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
@@ -38,7 +93,10 @@ public class Player : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (value.isPressed)
+        if (value.isPressed && isGrounded)
             isJump = true;
     }
+
+    
+    
 }
