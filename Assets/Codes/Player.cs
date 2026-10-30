@@ -9,8 +9,8 @@ public class Player : MonoBehaviour
     
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
-    
-    [SerializeField] private GameObject spawnPoint;
+
+    public int nowStage;
     
     [SerializeField] private Camera cam;
     
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
         Vector3 viewPos = cam.WorldToViewportPoint(transform.position);
         if (viewPos.x < 0 || viewPos.x > 1 || viewPos.y < 0 || viewPos.y > 1)
         {
-            transform.position = spawnPoint.transform.position;
+            GameManager.Instance.SpawnPlayer(nowStage);
             _rb.linearVelocity = Vector2.zero;
         }
     }
@@ -60,12 +60,27 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground")) _isGrounded = true;
-        if(collision.gameObject.CompareTag("Spike")) transform.position = spawnPoint.transform.position;
+        if(collision.gameObject.CompareTag("Spike")) GameManager.Instance.SpawnPlayer(nowStage);
     }
-
+    
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground")) _isGrounded = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            nowStage++;
+            GameManager.Instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+            GameManager.Instance.AddCoin();
+            Destroy(collision.gameObject);
+        }
     }
 
     public void OnMove(InputValue value)
