@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class player : MonoBehaviour
+public class Player : MonoBehaviour
 {
 
 
     public float speed;
 
     public float JumPow;
+
+    public int nowStage;
+    //(nowStage 전달)
 
     public GameObject spawnPoint;
 
@@ -27,6 +30,7 @@ public class player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anima = GetComponent<Animator>();
+        nowStage = 0;
     }
 
     private void Update()
@@ -60,18 +64,30 @@ public class player : MonoBehaviour
             isGrounded = true;
 
         if (collision.gameObject.CompareTag("Spike"))
-            gameObject.transform.position = spawnPoint.transform.position;
+            Gamemanager.instance.SpawnPlayer(nowStage);
 
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.CompareTag("DeathZone"))
+        if (collision.CompareTag("DeathZone"))
         {
             transform.position = spawnPoint.transform.position;
             rigid.linearVelocity = Vector2.zero;
         }
-           
+
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            nowStage++;
+            Gamemanager.instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("Coin"))
+        {
+            Gamemanager.instance.Addcoin();
+
+            Destroy(collision.gameObject);
+        }
     }
 
     void OnMove(InputValue value)
