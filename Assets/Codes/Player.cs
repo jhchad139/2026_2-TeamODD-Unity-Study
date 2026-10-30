@@ -6,6 +6,9 @@ public class Player : MonoBehaviour
 {
     public float speed;
     public float jumpPow;
+
+    public int nowStage;  // Gamemanager에 전달
+
     public GameObject spawnPoint;
 
     bool isJump = false;  // 점프를 눌렀는지 체크
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anima = GetComponent<Animator>();
+        nowStage = 0;
     }
 
     // 화면 프레임 업데이트
@@ -61,17 +65,33 @@ public class Player : MonoBehaviour
             isGrounded = true;
         
         if (collision.gameObject.CompareTag("Spike"))
-            gameObject.transform.position = spawnPoint.transform.position;
+            Gamemanager.instance.SpawnPlayer(nowStage);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            nowStage++;
+            Gamemanager.instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            Gamemanager.instance.AddCoin();
+
+            Destroy(collision.gameObject);
+        }
     }
 
     // 좌우 이동 함수
-    void OnMove(InputValue value)
+    public void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
     }
 
     // 점프 함수
-    void OnJump(InputValue value)
+    public void OnJump(InputValue value)
     {
         if (value.isPressed && isGrounded)
         {
