@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,9 @@ public class Player : MonoBehaviour
 {
     public float speed;
     public float jumpPow;
+
+    public int nowStage = 0; 
+
     public GameObject spawnPoint;
 
     bool isJump = false;
@@ -53,7 +57,21 @@ public class Player : MonoBehaviour
             isGrounded = true;
 
         if(collision.gameObject.CompareTag("Spike"))
-            gameObject.transform.position = spawnPoint.transform.position;
+            GameManager.instance.SpawnPlayer(nowStage);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision){
+        if(collision.gameObject.CompareTag("Finish")){
+            nowStage++;
+            GameManager.instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            GameManager.instance.AddCoint();
+
+            Destroy(collision.gameObject);
+        }    
     }
 
     void OnMove(InputValue value){
