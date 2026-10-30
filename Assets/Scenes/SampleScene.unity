@@ -817,6 +817,7 @@ MonoBehaviour:
   speed: 5
   jumpPower: 8
   spawnPoint: {fileID: 627308268}
+  cam: {fileID: 609156663}
 --- !u!95 &2107881555
 Animator:
   serializedVersion: 7
