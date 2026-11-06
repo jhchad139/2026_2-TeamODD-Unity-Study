@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class Gamemanager : MonoBehaviour
@@ -12,6 +13,8 @@ public class Gamemanager : MonoBehaviour
 
     public TMP_Text coinText;
     public int coinCount;
+
+    public GameObject endCanvas;
 
 
 
@@ -29,6 +32,11 @@ public class Gamemanager : MonoBehaviour
 
     public void MoveStage(int n)  // n = 현재 스테이지
     {
+        if (n >= stages.Length)
+        {
+            OpenClear();
+            return;
+        }
         stages[n - 1].SetActive(false);
 
         stages[n].SetActive(true);
@@ -45,6 +53,18 @@ public class Gamemanager : MonoBehaviour
         coinCount++;
         
         coinText.text = "coin : " + coinCount;
+    }
+
+    public void OpenClear()
+    {
+        endCanvas.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void GoTitle()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Title");
     }
 
 }
