@@ -44,6 +44,7 @@ public class Gamemanager : MonoBehaviour
     public void SpawnPlayer(int n)
     {
         player.transform.position = SpawnPoint[n].transform.position;
-      
+        FallingPf.ResetAll();
+
     }
 }
