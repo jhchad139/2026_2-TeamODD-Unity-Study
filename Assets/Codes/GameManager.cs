@@ -35,6 +35,10 @@ public class GameManager : MonoBehaviour
     public void SpawnPlayer(int n)
     {
         player.transform.position = spawnPoints[n].transform.position;
+        foreach (var platform in stages[n].GetComponentsInChildren<FallingPlatform>(true))
+        {
+            platform.gameObject.SetActive(true);
+        }
     }
 
     public void AddCoin()

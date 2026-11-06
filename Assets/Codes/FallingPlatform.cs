@@ -17,6 +17,6 @@ public class FallingPlatform : MonoBehaviour
     IEnumerator Disappear()
     {
         yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
