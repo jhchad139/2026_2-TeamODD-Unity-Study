@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] spawnPoints;
 
     [SerializeField] private TMP_Text coinText;
+    [SerializeField] private GameObject endCanvas;
     
     public int coinCount;
     
@@ -25,7 +27,14 @@ public class GameManager : MonoBehaviour
 
     public void MoveStage(int n)
     {
+        if (n >= stages.Length)
+        {
+            OpenClear();
+            return;
+        }
+            
         stages[n - 1].SetActive(false);
+        
  
         stages[n].SetActive(true);
         
@@ -45,5 +54,17 @@ public class GameManager : MonoBehaviour
     {
         coinCount ++;
         coinText.text = $"Coin : {coinCount}";
+    }
+
+    public void OpenClear()
+    {
+        endCanvas.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void GoTitle()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Title");
     }
 }

@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
         _animator.SetBool("isFall", _rb.linearVelocity.y < 0);
         
         Vector3 viewPos = cam.WorldToViewportPoint(transform.position);
-        if (viewPos.x < 0 || viewPos.x > 1 || viewPos.y < 0 || viewPos.y > 1)
+        if (/*viewPos.x < 0 || viewPos.x > 1 || viewPos.y > 1 || */viewPos.y < 0)
         {
             GameManager.Instance.SpawnPlayer(nowStage);
             _rb.linearVelocity = Vector2.zero;
