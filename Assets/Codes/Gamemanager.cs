@@ -5,17 +5,17 @@ using TMPro;
 public class Gamemanager : MonoBehaviour
 {
     public static Gamemanager instance;
+
+    // 플레이어가 리스폰될 때 발생하는 이벤트 (FallingPf 등이 구독)
+    public static event System.Action OnPlayerRespawn;
+
     public Player player;
-
-
     public GameObject[] stages;
     public GameObject[] spawnPoint;
-
+    public GameObject EndCanvas;
     public TMP_Text coinText;
+
     public int coinCount;
-
-    public GameObject endCanvas;
-
 
 
     private void Awake()
@@ -46,6 +46,8 @@ public class Gamemanager : MonoBehaviour
     public void SpawnPlayer(int n)  // n = 현재 스테이지
     {
         player.transform.position = spawnPoint[n].transform.position;
+
+        OnPlayerRespawn?.Invoke();  // 사라졌던 발판 등 복구
     }
 
     public void AddCoin()
@@ -54,10 +56,19 @@ public class Gamemanager : MonoBehaviour
         
         coinText.text = "coin : " + coinCount;
     }
+    public void DecreaseCoin()
+    {
+        if (coinCount > 0)
+            coinCount--;
+        else
+            coinCount = 0;
+
+        coinText.text = "coin : " + coinCount;
+    }
 
     public void OpenClear()
     {
-        endCanvas.SetActive(true);
+        EndCanvas.SetActive(true);
         Time.timeScale = 0f;
     }
 

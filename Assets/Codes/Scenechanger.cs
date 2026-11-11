@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class Scenechanger : MonoBehaviour
 {
-    
-    public void StatGame()
+    public void StartGame()
     {
         SceneManager.LoadScene("Game");
     }
