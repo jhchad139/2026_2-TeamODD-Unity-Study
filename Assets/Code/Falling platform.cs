@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class Fallingplatform : MonoBehaviour
 {
+    public static Fallingplatform instance;
+       private void Awake()
+    {
+        instance = this;
+    }
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.relativeVelocity.y > 0.1f)
@@ -15,6 +20,11 @@ public class Fallingplatform : MonoBehaviour
     IEnumerator Disappear()
     {
         yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
+    public void respawn()
+    {
+        gameObject.SetActive(true);
+    }
+
 }
