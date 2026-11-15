@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public float speed;
     public float jumpPower;
+    public int nowStage;
 
     public GameObject spawnpoint;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anime = GetComponent<Animator>();
+        nowStage = 0;
     }
 
     private void Update()
@@ -34,6 +36,7 @@ public class Player : MonoBehaviour
             sprite.flipX = false;
 
         anime.SetBool("move", inputVec.x != 0);
+        anime.SetBool("jump", isJump == true);
     }
 
     void FixedUpdate()
@@ -67,7 +70,31 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground")) 
             isGrounded = true;
 
-        if(collision.gameObject.CompareTag("Spike"))
-            gameObject.transform.position = spawnpoint.transform.position;
+        if (collision.gameObject.CompareTag("Spike"))
+            GameMananger.instance.SpawnPlayer(nowStage);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            nowStage++;
+            GameMananger.instance.MoveStage(nowStage);
+        }
+
+        if (collision.gameObject.CompareTag("coin"))
+        {
+            GameMananger.instance.Addcoin();
+
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Boundary"))
+        {
+            GameMananger.instance.SpawnPlayer(nowStage);
+        }
     }
 }

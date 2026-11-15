@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class fallingPf : MonoBehaviour
 {
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -17,7 +17,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     IEnumerator Disap()
     {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(2.5f);
+        gameObject.SetActive(false);
     }
+
 }
